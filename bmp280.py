@@ -137,8 +137,8 @@ def read_data(addr=DEVICE):
     temperature = temperature / 100
     pressure = pressure / 1000
 
-    altitude = 44330.7694402059 * (10 ** ((math.log10(pressure / 101.325))
-                                          / 5.2558797) - 1)
+    altitude = -44330.7694402059 * (10 ** ((math.log10(pressure / 101.325))
+                                           / 5.2558797) - 1)
   
     return temperature, pressure, altitude
 
