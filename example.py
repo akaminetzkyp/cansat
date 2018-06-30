@@ -1,6 +1,7 @@
 import servo
 import bmp280
 import dht11
+import mpu9250
 import RPi.GPIO as GPIO
 import time
 
@@ -34,10 +35,32 @@ def dht11_example():
 
 
 def mpu9250_example():
-    pass
+    mpu9250_1 = mpu9250.MPU9250()
+    accel = mpu9250_1.readAccel()
+    
+    
+    print('MPU9250')
+    
+    print("ax =", (accel['x']))
+    print("ay =", (accel['y']))
+    print("az =", (accel['z']))
+
+    gyro = mpu9250_1.readGyro()
+    print("gx =", (gyro['x']))
+    print("gy =", (gyro['y']))
+    print("gz =", (gyro['z']))
+
+    mag = mpu9250_1.readMagnet()
+    print("mx =", (mag['x']))
+    print("my =", (mag['y']))
+    print("mz =", (mag['z']))
+    print()
 
 
 if __name__ == '__main__':
-    servo_example()
-    bmp280_example()
-    dht11_example()
+    pass
+    # servo_example()
+    # bmp280_example()
+    # dht11_example()
+    # mpu9250_example()
+    
