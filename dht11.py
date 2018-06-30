@@ -31,6 +31,7 @@ class DHT11:
         self.__pin = pin
 
     def read(self):
+        RPi.GPIO.setmode(RPi.GPIO.BCM)
         RPi.GPIO.setup(self.__pin, RPi.GPIO.OUT)
 
         # send initial high
