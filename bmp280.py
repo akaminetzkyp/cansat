@@ -150,7 +150,7 @@ def main():
 
     temperature, pressure, altitude = read_data()
 
-    print("Temperature: ", temperature, "ºC")
+    print("Temperature: ", temperature, "C")
     print("Pressure: ", pressure, "kPa")
     print("Altitude: ", altitude, "m")
 
