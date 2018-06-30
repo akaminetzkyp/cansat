@@ -1,7 +1,8 @@
 import RPi.GPIO as GPIO
 
+
 # La posición del servo es un número entre 0 y 1
-class Servo():
+class Servo:
     def __init__(self, pos):
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(18, GPIO.OUT)
@@ -15,5 +16,3 @@ class Servo():
         
     def stop(self):
         self.pwm.stop()
-        
-        
