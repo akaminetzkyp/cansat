@@ -21,6 +21,7 @@
 import smbus
 import time
 from ctypes import c_short
+import math
 
 DEVICE = 0x76  # Default device I2C address
 
@@ -132,8 +133,14 @@ def read_data(addr=DEVICE):
         var1 = dig_p9 * pressure * pressure / 2147483648.0
         var2 = pressure * dig_p8 / 32768.0
         pressure = pressure + (var1 + var2 + dig_p7) / 16.0
+
+    temperature = temperature / 100
+    pressure = pressure / 10
+
+    altitude = 44330.7694402059 * (10 ^ ((math.log10(pressure / 101.325))
+                                         / (5.2558797)) - 1)
   
-    return temperature/100.0, pressure/100.0
+    return temperature, pressure, altitude
 
 
 def main():
@@ -141,10 +148,11 @@ def main():
     print("Chip ID:", chip_id)
     print("Version:", chip_version)
 
-    temperature, pressure = read_data()
+    temperature, pressure, altitude = read_data()
 
     print("Temperature: ", temperature, "ºC")
-    print("Pressure: ", pressure, "hPa")
+    print("Pressure: ", pressure, "kPa")
+    print("Altitude: ", altitude, "m")
 
 
 if __name__ == "__main__":
