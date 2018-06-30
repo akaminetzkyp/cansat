@@ -144,10 +144,6 @@ def read_data(addr=DEVICE):
 
 
 def main():
-    (chip_id, chip_version) = read_id()
-    print("Chip ID:", chip_id)
-    print("Version:", chip_version)
-
     temperature, pressure, altitude = read_data()
 
     print("Temperature: ", temperature, "C")
