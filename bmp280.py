@@ -135,7 +135,7 @@ def read_data(addr=DEVICE):
         pressure = pressure + (var1 + var2 + dig_p7) / 16.0
 
     temperature = temperature / 100
-    pressure = pressure / 10
+    pressure = pressure / 1000
 
     altitude = 44330.7694402059 * (10 ** ((math.log10(pressure / 101.325))
                                           / 5.2558797) - 1)
