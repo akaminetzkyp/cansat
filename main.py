@@ -2,6 +2,7 @@ import RPi.GPIO as GPIO
 import servo
 import bmp280
 import time
+import datetime
 
 
 def main():
@@ -10,13 +11,13 @@ def main():
         samples = 10
         delay_sample = 0.05
 
-        altitude_max = -float("inf")
+        altitude_max = -float('inf')
 
         servo_1 = servo.Servo(0)
 
         print('Beginning altitude check.')
         with open('log.txt', 'a') as file:
-            text = time.strftime("%c") + ' - '
+            text = datetime.datetime.utcnow().isoformat() + ' - '
             text += 'Starting script.\n'
             file.write(text)
 
@@ -33,7 +34,7 @@ def main():
                 print('Deploying parachute. Resetting in 60 seconds.')
                 servo_1.change_pos(1)
                 with open('log.txt', 'a') as file:
-                    text = time.strftime("%c") + ' - '
+                    text = datetime.datetime.utcnow().isoformat() + ' - '
                     text += 'Deploying parachute - '
                     text += 'Altitude: ' + str(altitude_mean) + ' - '
                     text += 'Max Altitude: ' + str(altitude_max) + '\n'
@@ -43,7 +44,7 @@ def main():
                 altitude_max = -float("inf")
             else:
                 with open('log.txt', 'a') as file:
-                    text = time.strftime("%c") + ' - '
+                    text = datetime.datetime.utcnow().isoformat() + ' - '
                     text += 'Altitude: ' + str(altitude_mean) + ' - '
                     text += 'Max Altitude: ' + str(altitude_max) + '\n'
                     file.write(text)
@@ -52,7 +53,7 @@ def main():
         GPIO.cleanup()
         print('Terminating script.')
         with open('log.txt', 'a') as file:
-            text = time.strftime("%c") + ' - '
+            text = datetime.datetime.utcnow().isoformat() + ' - '
             text += 'Terminating script.\n'
             file.write(text)
 
