@@ -14,6 +14,10 @@ def main():
         servo_1 = servo.Servo(0)
 
         print('Beginning altitude check.')
+        with open('log.txt', 'a') as file:
+            text = time.strftime("%c") + ' - '
+            text += 'Starting script.\n'
+            file.write(text)
 
         while True:
             data_list = []
@@ -31,7 +35,7 @@ def main():
                     text = time.strftime("%c") + ' - '
                     text += 'Deploying parachute - '
                     text += 'Altitude: ' + str(altitude_mean) + ' - '
-                    text += 'Max Altitude: ' + str(altitude_max)
+                    text += 'Max Altitude: ' + str(altitude_max) + '\n'
                     file.write(text)
                 time.sleep(60)
                 servo_1.change_pos(0)
@@ -40,14 +44,15 @@ def main():
                 with open('log.txt', 'a') as file:
                     text = time.strftime("%c") + ' - '
                     text += 'Altitude: ' + str(altitude_mean) + ' - '
-                    text += 'Max Altitude: ' + str(altitude_max)
+                    text += 'Max Altitude: ' + str(altitude_max) + '\n''
                     file.write(text)
     except KeyboardInterrupt:
         servo_1.stop()
         GPIO.cleanup()
+        print('Terminating script.')
         with open('log.txt', 'a') as file:
             text = time.strftime("%c") + ' - '
-            text += 'Terminating script.'
+            text += 'Terminating script.\n'
             file.write(text)
 
 if __name__ == '__main__':
