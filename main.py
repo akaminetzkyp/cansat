@@ -44,7 +44,7 @@ def main():
                 with open('log.txt', 'a') as file:
                     text = time.strftime("%c") + ' - '
                     text += 'Altitude: ' + str(altitude_mean) + ' - '
-                    text += 'Max Altitude: ' + str(altitude_max) + '\n''
+                    text += 'Max Altitude: ' + str(altitude_max) + '\n'
                     file.write(text)
     except KeyboardInterrupt:
         servo_1.stop()
