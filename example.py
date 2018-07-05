@@ -38,7 +38,6 @@ def mpu9250_example():
     mpu9250_1 = mpu9250.MPU9250()
     accel = mpu9250_1.readAccel()
     
-    
     print('MPU9250')
     
     print("ax =", (accel['x']))
@@ -60,7 +59,6 @@ def mpu9250_example():
 if __name__ == '__main__':
     pass
     # servo_example()
-    # bmp280_example()
+    # bmp280_example()
     # dht11_example()
     # mpu9250_example()
-    
