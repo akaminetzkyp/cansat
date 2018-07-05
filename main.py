@@ -6,53 +6,54 @@ import datetime
 
 
 def main():
-    try:
-        altitude_dif = 2
-        samples = 10
-        delay_sample = 0.05
+    with open('log.txt', 'a') as file:
+        try:
+            altitude_dif = 2
+            samples = 10
+            delay_sample = 0.05
 
-        altitude_max = -float('inf')
+            altitude_max = -float('inf')
 
-        servo_1 = servo.Servo(0)
+            servo_1 = servo.Servo(0)
 
-        print('Beginning altitude check.')
-        with open('log.txt', 'a') as file:
+            print('Beginning altitude check.')
+
             text = datetime.datetime.utcnow().isoformat() + ' - '
             text += 'Starting script.\n'
             file.write(text)
 
-        while True:
-            data_list = []
-            for _ in range(samples):
-                temperature, pressure, altitude = bmp280.read_data()
-                data_list.append(altitude)
-                time.sleep(delay_sample)
-            altitude_mean = sum(data_list) / samples
-            altitude_max = max(altitude_max, altitude_mean)
+            while True:
+                data_list = []
+                for _ in range(samples):
+                    temperature, pressure, altitude = bmp280.read_data()
+                    data_list.append(altitude)
+                    time.sleep(delay_sample)
+                altitude_mean = sum(data_list) / samples
+                altitude_max = max(altitude_max, altitude_mean)
 
-            if altitude_mean < altitude_max - altitude_dif:
-                print('Deploying parachute. Resetting in 60 seconds.')
-                servo_1.change_pos(1)
-                with open('log.txt', 'a') as file:
+                if altitude_mean < altitude_max - altitude_dif:
+                    print('Deploying parachute. Resetting in 60 seconds.')
+                    servo_1.change_pos(1)
+
                     text = datetime.datetime.utcnow().isoformat() + ' - '
                     text += 'Deploying parachute - '
                     text += 'Altitude: ' + str(altitude_mean) + ' - '
                     text += 'Max Altitude: ' + str(altitude_max) + '\n'
                     file.write(text)
-                time.sleep(60)
-                servo_1.change_pos(0)
-                altitude_max = -float("inf")
-            else:
-                with open('log.txt', 'a') as file:
+
+                    time.sleep(60)
+                    servo_1.change_pos(0)
+                    altitude_max = -float("inf")
+                else:
                     text = datetime.datetime.utcnow().isoformat() + ' - '
                     text += 'Altitude: ' + str(altitude_mean) + ' - '
                     text += 'Max Altitude: ' + str(altitude_max) + '\n'
                     file.write(text)
-    except KeyboardInterrupt:
-        servo_1.stop()
-        GPIO.cleanup()
-        print('Terminating script.')
-        with open('log.txt', 'a') as file:
+        except KeyboardInterrupt:
+            servo_1.stop()
+            GPIO.cleanup()
+            print('Terminating script.')
+
             text = datetime.datetime.utcnow().isoformat() + ' - '
             text += 'Terminating script.\n'
             file.write(text)
