@@ -6,7 +6,7 @@ import datetime
 
 
 def main():
-    with open('log.txt', 'a') as file:
+    with open('/home/pi/Desktop/CanSat/log.txt', 'a') as file:
         try:
             altitude_dif = 2
             samples = 10
