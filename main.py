@@ -49,7 +49,7 @@ def main():
                     text += 'Altitude: ' + str(altitude_mean) + ' - '
                     text += 'Max Altitude: ' + str(altitude_max) + '\n'
                     file.write(text)
-        except KeyboardInterrupt:
+        finally:
             servo_1.stop()
             GPIO.cleanup()
             print('Terminating script.')
