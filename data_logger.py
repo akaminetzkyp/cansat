@@ -47,7 +47,7 @@ class Logger:
                         gyro['x'], gyro['y'], gyro['z'],
                         mag['x'], mag['y'], mag['z']])
 
-            rows_text += ','.join(row) + '\n'
+            rows_text += ','.join(str(x) for x in row) + '\n'
             row_counter += 1
 
             if row_counter >= 20:
