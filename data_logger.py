@@ -11,7 +11,7 @@ class Logger:
         self.run = True
 
     def log(self):
-        last_dht11_sample_time = 0
+        last_dht11_sample_time = 0.0
         row_counter = 0
         rows_text = ''
 
@@ -36,7 +36,7 @@ class Logger:
 
             row.extend(self.bmp280.read_last_data())
 
-            if time.time() - last_dht11_sample_time > 2:
+            if time.time() - last_dht11_sample_time > 2.5:
                 dht11_data = self.dht11.read()
                 row.extend([dht11_data.temperature, dht11_data.humidity])
                 last_dht11_sample_time = time.time()
