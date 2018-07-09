@@ -17,7 +17,7 @@ class Logger:
 
         formatted_datetime = datetime.datetime.utcnow().strftime(
             '%Y%m%d-%H%M%S')
-        file_name = 'logs/log_{}.csv'.format(formatted_datetime)
+        file_name = 'log_{}.csv'.format(formatted_datetime)
         with open(file_name, 'w') as file:
             header = ('Datetime,Temperature (BMP280),Pressure (BMP280),'
                       'Altitude (BMP280),Temperature (DHT11),Humidity (DHT11),'
