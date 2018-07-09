@@ -1,63 +1,51 @@
-import RPi.GPIO as GPIO
-import servo
-import bmp280
+import threading
 import time
+import sys
 import datetime
+import bmp280
+import dht11
+import mpu9250
+import servo
+import parachute_deployer
+import data_logger
+import camera
 
 
-def main():
-    with open('/home/pi/Desktop/CanSat/log.txt', 'a') as file:
-        try:
-            altitude_dif = 2
-            samples = 10
-            delay_sample = 0.05
-            bmp280_0 = bmp280.BMP280(delay_sample - 0.01)
+def main(altitude_dif, delay_sample):
+    formatted_time = datetime.datetime.utcnow().isoformat()
+    print('[{}][main] Starting main'.format(formatted_time))
 
-            altitude_max = -float('inf')
+    bmp280_0 = bmp280.BMP280(delay_sample - 0.01)
+    dht11_0 = dht11.DHT11(pin=4)
+    mpu9250_0 = mpu9250.MPU9250()
+    servo_0 = servo.Servo(0)
 
-            servo_1 = servo.Servo(0)
+    deployer_0 = parachute_deployer.Deployer(bmp280_0, servo_0, altitude_dif,
+                                             delay_sample)
+    camera_0 = camera.Camera()
+    logger_0 = data_logger.Logger(bmp280_0, dht11_0, mpu9250_0)
 
-            print('Beginning altitude check.')
+    deployer_thread = threading.Thread(target=deployer_0.main)
+    camera_thread = threading.Thread(target=camera_0.record_time, args=(600,))
+    logging_thread = threading.Thread(target=logger_0.log_time, args=(600,))
 
-            text = datetime.datetime.utcnow().isoformat() + ' - '
-            text += 'Starting script.\n'
-            file.write(text)
+    deployer_thread.start()
+    camera_thread.start()
+    logging_thread.start()
 
-            while True:
-                data_list = []
-                for _ in range(samples):
-                    temperature, pressure, altitude = bmp280_0.read_last_data()
-                    data_list.append(altitude)
-                    time.sleep(delay_sample)
-                altitude_mean = sum(data_list) / samples
-                altitude_max = max(altitude_max, altitude_mean)
+    while True:
+        input_text = input()
+        if input_text == 'exit':
+            deployer_0.run = False
+            camera_0.stop_recording()
+            logger_0.run = False
+            formatted_time = datetime.datetime.utcnow().isoformat()
+            print('[{}][main] Exiting in 2 seconds'.format(formatted_time))
+            time.sleep(2)
+            sys.exit()
 
-                if altitude_mean < altitude_max - altitude_dif:
-                    print('Deploying parachute. Resetting in 60 seconds.')
-                    servo_1.change_pos(1)
-
-                    text = datetime.datetime.utcnow().isoformat() + ' - '
-                    text += 'Deploying parachute - '
-                    text += 'Altitude: ' + str(altitude_mean) + ' - '
-                    text += 'Max Altitude: ' + str(altitude_max) + '\n'
-                    file.write(text)
-
-                    time.sleep(60)
-                    servo_1.change_pos(0)
-                    altitude_max = -float("inf")
-                else:
-                    text = datetime.datetime.utcnow().isoformat() + ' - '
-                    text += 'Altitude: ' + str(altitude_mean) + ' - '
-                    text += 'Max Altitude: ' + str(altitude_max) + '\n'
-                    file.write(text)
-        finally:
-            servo_1.stop()
-            GPIO.cleanup()
-            print('Terminating script.')
-
-            text = datetime.datetime.utcnow().isoformat() + ' - '
-            text += 'Terminating script.\n'
-            file.write(text)
 
 if __name__ == '__main__':
-    main()
+    altitude_dif_0 = 2
+    delay_sample_0 = 0.05
+    main(altitude_dif_0, delay_sample_0)
