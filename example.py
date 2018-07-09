@@ -32,7 +32,7 @@ def dht11_example():
     result = dht11_0.read()
     print('DHT11')
     print("Temperature: ", result.temperature, "C")
-    print("HUmidity: ", result.humidity, "%\n")
+    print("Humidity: ", result.humidity, "%\n")
 
 
 def mpu9250_example():
