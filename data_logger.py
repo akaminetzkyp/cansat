@@ -34,14 +34,20 @@ class Logger:
         while self.run:
             row = [datetime.datetime.utcnow().isoformat()]
 
+            formatted_time = datetime.datetime.utcnow().isoformat()
+            print('[{}][Logger.log] Reading BMP280'.format(formatted_time))
             row.extend(self.bmp280.read_last_data())
 
             if time.time() - last_dht11_sample_time > 2:
+                formatted_time = datetime.datetime.utcnow().isoformat()
+                print('[{}][Logger.log] Reading DHT11'.format(formatted_time))
                 dht11_data = self.dht11.read()
                 row.extend([dht11_data.temperature, dht11_data.humidity])
             else:
                 row.extend(['', ''])
 
+            formatted_time = datetime.datetime.utcnow().isoformat()
+            print('[{}][Logger.log] Reading MPU9250'.format(formatted_time))
             accel = self.mpu9250.readAccel()
             gyro = self.mpu9250.readGyro()
             mag = self.mpu9250.readMagnet()
