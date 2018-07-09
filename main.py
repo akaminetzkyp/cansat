@@ -1,6 +1,5 @@
 import threading
 import time
-import sys
 import datetime
 import bmp280
 import dht11
@@ -11,20 +10,27 @@ import data_logger
 import camera
 
 
-def finisher(deployer_0, camera_0, logger_0):
+def exit_script(deployer_0, logger_0, camera_0):
+    formatted_time = datetime.datetime.utcnow().isoformat()
+    print('[{}][exit_script] Exiting'.format(formatted_time))
+    deployer_0.run = False
+    logger_0.run = False
+    camera_0.stop_recording()
+
+
+def finisher_input(deployer_0, logger_0, camera_0):
     while True:
         input_text = input()
         if input_text == 'exit':
-            deployer_0.run = False
-            camera_0.run = False
-            logger_0.run = False
-            formatted_time = datetime.datetime.utcnow().isoformat()
-            print('[{}][main] Exiting in 2 seconds'.format(formatted_time))
-            time.sleep(2)
-            sys.exit()
+            exit_script(deployer_0, logger_0, camera_0)
 
 
-def main(altitude_dif, delay_sample):
+def finisher_time(deployer_0, logger_0, camera_0, max_time):
+    time.sleep(max_time)
+    exit_script(deployer_0, logger_0, camera_0)
+
+
+def main(max_time, altitude_dif, delay_sample):
     formatted_time = datetime.datetime.utcnow().isoformat()
     print('[{}][main] Starting main'.format(formatted_time))
 
@@ -35,25 +41,30 @@ def main(altitude_dif, delay_sample):
 
     deployer_0 = parachute_deployer.Deployer(bmp280_0, servo_0, altitude_dif,
                                              delay_sample)
-    camera_0 = camera.Camera()
     logger_0 = data_logger.Logger(bmp280_0, dht11_0, mpu9250_0)
+    camera_0 = camera.Camera()
 
     deployer_thread = threading.Thread(target=deployer_0.main)
-    camera_thread = threading.Thread(target=camera_0.record_time, args=(600,))
-    logging_thread = threading.Thread(target=logger_0.log_time, args=(600,))
+    logging_thread = threading.Thread(target=logger_0.log)
 
     deployer_thread.start()
-    camera_thread.start()
     logging_thread.start()
 
-    finisher_thread = threading.Thread(target=finisher, args=(deployer_0,
-                                                              camera_0,
-                                                              logger_0),
-                                       daemon=True)
-    finisher_thread.start()
+    camera_0.start_recording()
+
+    finisher_input_thread = threading.Thread(target=finisher_input,
+                                             args=(deployer_0, logger_0,
+                                                   camera_0), daemon=True)
+    finisher_time_thread = threading.Thread(target=finisher_time,
+                                            args=(deployer_0, logger_0,
+                                                  camera_0, max_time),
+                                            daemon=True)
+    finisher_input_thread.start()
+    finisher_time_thread.start()
 
 
 if __name__ == '__main__':
+    max_time_0 = 600
     altitude_dif_0 = 2
     delay_sample_0 = 0.05
-    main(altitude_dif_0, delay_sample_0)
+    main(max_time_0, altitude_dif_0, delay_sample_0)

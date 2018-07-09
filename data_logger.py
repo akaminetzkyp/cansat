@@ -6,5 +6,5 @@ class Logger:
 
         self.run = True
 
-    def log_time(self, seconds):
+    def log(self):
         pass
