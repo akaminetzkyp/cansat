@@ -8,9 +8,15 @@ class Camera:
         self.camera = picamera.PiCamera()
         self.recording = False
 
+        self.run = True
+
     def record_time(self, seconds):
         self.start_recording()
-        time.sleep(seconds)
+        for _ in range(seconds):
+            if self.run:
+                time.sleep(1)
+            else:
+                break
         self.stop_recording()
 
     def start_recording(self):

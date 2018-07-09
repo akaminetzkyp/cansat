@@ -37,7 +37,7 @@ def main(altitude_dif, delay_sample):
         input_text = input()
         if input_text == 'exit':
             deployer_0.run = False
-            camera_0.stop_recording()
+            camera_0.run = False
             logger_0.run = False
             formatted_time = datetime.datetime.utcnow().isoformat()
             print('[{}][main] Exiting in 2 seconds'.format(formatted_time))

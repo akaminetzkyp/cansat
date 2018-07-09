@@ -40,6 +40,8 @@ class Deployer:
                 for _ in range(60):
                     if self.run:
                         time.sleep(1)
+                    else:
+                        break
 
                 self.servo.change_pos(0)
                 altitude_max = -float("inf")
