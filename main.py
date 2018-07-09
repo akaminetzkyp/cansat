@@ -11,6 +11,19 @@ import data_logger
 import camera
 
 
+def finisher(deployer_0, camera_0, logger_0):
+    while True:
+        input_text = input()
+        if input_text == 'exit':
+            deployer_0.run = False
+            camera_0.run = False
+            logger_0.run = False
+            formatted_time = datetime.datetime.utcnow().isoformat()
+            print('[{}][main] Exiting in 2 seconds'.format(formatted_time))
+            time.sleep(2)
+            sys.exit()
+
+
 def main(altitude_dif, delay_sample):
     formatted_time = datetime.datetime.utcnow().isoformat()
     print('[{}][main] Starting main'.format(formatted_time))
@@ -33,16 +46,11 @@ def main(altitude_dif, delay_sample):
     camera_thread.start()
     logging_thread.start()
 
-    while True:
-        input_text = input()
-        if input_text == 'exit':
-            deployer_0.run = False
-            camera_0.run = False
-            logger_0.run = False
-            formatted_time = datetime.datetime.utcnow().isoformat()
-            print('[{}][main] Exiting in 2 seconds'.format(formatted_time))
-            time.sleep(2)
-            sys.exit()
+    finisher_thread = threading.Thread(target=finisher, args=(deployer_0,
+                                                              camera_0,
+                                                              logger_0),
+                                       daemon=True)
+    finisher_thread.start()
 
 
 if __name__ == '__main__':
