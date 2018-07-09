@@ -28,6 +28,9 @@ class Logger:
                       'Magnetometer Z (MPU9250)\n')
             file.write(header)
 
+        formatted_time = datetime.datetime.utcnow().isoformat()
+        print('[{}][Logger.log] Logging starting'.format(formatted_time))
+
         while self.run:
             row = [datetime.datetime.utcnow().isoformat()]
 
@@ -57,3 +60,6 @@ class Logger:
                 row_counter = 0
 
             time.sleep(0.1)
+
+        formatted_time = datetime.datetime.utcnow().isoformat()
+        print('[{}][Logger.log] Logging stopped'.format(formatted_time))
