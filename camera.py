@@ -5,7 +5,7 @@ import time
 
 class Camera:
     def __init__(self):
-        self.camera = picamera.Picamera()
+        self.camera = picamera.PiCamera()
         self.recording = False
 
     def record_time(self, seconds):
