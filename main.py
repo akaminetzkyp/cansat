@@ -11,6 +11,7 @@ def main():
             altitude_dif = 2
             samples = 10
             delay_sample = 0.05
+            bmp280_0 = bmp280.BMP280(delay_sample - 0.01)
 
             altitude_max = -float('inf')
 
@@ -25,7 +26,7 @@ def main():
             while True:
                 data_list = []
                 for _ in range(samples):
-                    temperature, pressure, altitude = bmp280.read_data()
+                    temperature, pressure, altitude = bmp280_0.read_last_data()
                     data_list.append(altitude)
                     time.sleep(delay_sample)
                 altitude_mean = sum(data_list) / samples

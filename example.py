@@ -18,7 +18,8 @@ def servo_example():
 
 def bmp280_example():
     # Pin SDA1 and SCL1
-    temperature, pressure, altitude = bmp280.read_data()
+    bmp280_0 = bmp280.BMP280(0.05)
+    temperature, pressure, altitude = bmp280_0.read_last_data()
     print('BMP280')
     print("Temperature: ", temperature, "C")
     print("Pressure: ", pressure, "kPa")
@@ -27,29 +28,29 @@ def bmp280_example():
 
 def dht11_example():
     # Pin 4
-    dht11_1 = dht11.DHT11(pin=4)
-    result = dht11_1.read()
+    dht11_0 = dht11.DHT11(pin=4)
+    result = dht11_0.read()
     print('DHT11')
     print("Temperature: ", result.temperature, "C")
     print("HUmidity: ", result.humidity, "%\n")
 
 
 def mpu9250_example():
-    mpu9250_1 = mpu9250.MPU9250()
-    accel = mpu9250_1.readAccel()
+    mpu9250_0 = mpu9250.MPU9250()
     
     print('MPU9250')
-    
+
+    accel = mpu9250_0.readAccel()
     print("ax =", (accel['x']))
     print("ay =", (accel['y']))
     print("az =", (accel['z']))
 
-    gyro = mpu9250_1.readGyro()
+    gyro = mpu9250_0.readGyro()
     print("gx =", (gyro['x']))
     print("gy =", (gyro['y']))
     print("gz =", (gyro['z']))
 
-    mag = mpu9250_1.readMagnet()
+    mag = mpu9250_0.readMagnet()
     print("mx =", (mag['x']))
     print("my =", (mag['y']))
     print("mz =", (mag['z']))
