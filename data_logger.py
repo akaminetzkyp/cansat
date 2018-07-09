@@ -39,6 +39,7 @@ class Logger:
             if time.time() - last_dht11_sample_time > 2:
                 dht11_data = self.dht11.read()
                 row.extend([dht11_data.temperature, dht11_data.humidity])
+                last_dht11_sample_time = time.time()
             else:
                 row.extend(['', ''])
 
