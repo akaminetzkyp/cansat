@@ -1,6 +1,5 @@
 import picamera
 import datetime
-import time
 
 
 class Camera:
