@@ -17,7 +17,7 @@ class Camera:
         else:
             formatted_datetime = datetime.datetime.utcnow().strftime(
                 '%Y%m%d-%H%M%S')
-            self.camera.start_recording('video_{}.h264'.format(
+            self.camera.start_recording('videos/video_{}.h264'.format(
                 formatted_datetime))
             self.recording = True
 
