@@ -17,8 +17,9 @@ class Camera:
         else:
             formatted_datetime = datetime.datetime.utcnow().strftime(
                 '%Y%m%d-%H%M%S')
-            self.camera.start_recording('video_{}.h264'.format(
-                formatted_datetime))
+            self.camera.start_recording('/home/pi/Desktop/CanSat/videos/'
+                                        'video_{}.h264'.format(
+                                            formatted_datetime))
             self.recording = True
 
             formatted_time = datetime.datetime.utcnow().isoformat()
