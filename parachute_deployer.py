@@ -34,7 +34,7 @@ class Deployer:
             if altitude_mean < altitude_max - self.altitude_dif:
                 formatted_time = datetime.datetime.utcnow().isoformat()
                 print('[{}][Deployer.main] Deploying parachute. Resetting in '
-                      '60 seconds')
+                      '60 seconds').format(formatted_time)
                 self.servo.change_pos(1)
 
                 for _ in range(60):
